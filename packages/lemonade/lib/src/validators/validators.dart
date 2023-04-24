@@ -20,6 +20,10 @@ abstract class Validator {
 
   const factory Validator.nullValue() = NullValidator;
 
+  const factory Validator.equals(Object? matcher) = EqualsValidator;
+
+  const factory Validator.oneOf(Iterable<Object?> set) = OneOfValidator;
+
   factory Validator.number({
     num? min,
     num? max,

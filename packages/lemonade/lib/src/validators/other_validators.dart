@@ -13,3 +13,21 @@ class NullValidator extends Validator {
   @override
   bool validate(data) => data == null;
 }
+
+class EqualsValidator extends Validator {
+  const EqualsValidator(this.matcher) : super(expected: 'equals $matcher');
+
+  final Object? matcher;
+
+  @override
+  bool validate(data) => data == matcher;
+}
+
+class OneOfValidator extends Validator {
+  const OneOfValidator(this.set) : super(expected: 'one of $set');
+
+  final Iterable<Object?> set;
+
+  @override
+  bool validate(data) => set.contains(data);
+}

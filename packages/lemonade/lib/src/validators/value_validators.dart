@@ -95,8 +95,8 @@ class StringValidator extends ValueValidator {
     if (isViolatesNull(data)) return false;
     if (data == null) return true;
 
+    if (minLength != null && data.length < minLength!) return false;
     if (maxLength != null && data.length > maxLength!) return false;
-    if (minLength != null && data.length > minLength!) return false;
 
     if (pattern != null && pattern!.allMatches(data).isEmpty) return false;
 
