@@ -107,24 +107,19 @@ class MapValidator extends CollectionValidator {
 
 class ObjectValidator extends ValueValidator {
   ObjectValidator({
-    required this.items,
-    this.maxItems,
-    this.minItems,
+    this.items = const {},
     this.ignoreExtra = true,
     bool nullable = false,
   }) : super(
           typeName: 'object',
           properties: {
+            // TODO(uSlashVlad): Add normal annotation for object
             'items': items,
-            'maxItems': maxItems,
-            'minItems': minItems,
           },
           nullable: nullable,
         );
 
   final Map<String, Validator> items;
-  final int? maxItems;
-  final int? minItems;
   final bool ignoreExtra;
 
   @override
@@ -134,15 +129,10 @@ class ObjectValidator extends ValueValidator {
     if (isViolatesNull(data)) return false;
     if (data == null) return true;
 
-    if (maxItems != null && data.length > maxItems!) return false;
-    if (minItems != null && data.length < minItems!) return false;
+    if (!ignoreExtra && items.length != data.length) return false;
 
-    for (final key in data.keys) {
-      if (key is! String) return false;
-
-      if (!ignoreExtra && !items.containsKey(key)) return false;
-
-      if (!(items[key]?.validate(data) ?? true)) return false;
+    for (final entry in items.entries) {
+      if (!entry.value.validate(data[entry.key])) return false;
     }
 
     return true;

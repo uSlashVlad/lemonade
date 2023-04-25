@@ -1,4 +1,6 @@
 import 'package:lemonade/src/validators/collections_validators.dart';
+import 'package:lemonade/src/validators/compound_validators.dart';
+import 'package:lemonade/src/validators/other_validators.dart';
 import 'package:lemonade/src/validators/value_validators.dart';
 import 'package:test/test.dart';
 
@@ -150,6 +152,136 @@ void main() {
       expect(validator.validate({1: '2', 2: '3'}), false);
       expect(validator.validate({'1234': 2, '2': 3}), false);
       expect(validator.validate({'1': 20, '2': 3}), false);
+    });
+
+    test('Min constrains', () {
+      final validator = MapValidator(minItems: 2);
+
+      expect(validator.validate({}), false);
+      expect(validator.validate({1: 2}), false);
+      expect(validator.validate({1: 2, 2: 3}), true);
+      expect(validator.validate({1: 2, 2: 3, 3: 4}), true);
+      expect(validator.validate(List.generate(100, (i) => i).asMap()), true);
+    });
+
+    test('Max constrains', () {
+      final validator = MapValidator(maxItems: 2);
+
+      expect(validator.validate({}), true);
+      expect(validator.validate({1: 2}), true);
+      expect(validator.validate({1: 2, 2: 3}), true);
+      expect(validator.validate({1: 2, 2: 3, 3: 4}), false);
+      expect(validator.validate(List.generate(100, (i) => i).asMap()), false);
+    });
+
+    test('Both constrains', () {
+      final validator = MapValidator(minItems: 1, maxItems: 3);
+
+      expect(validator.validate({}), false);
+      expect(validator.validate({1: 2}), true);
+      expect(validator.validate({1: 2, 2: 3}), true);
+      expect(validator.validate({1: 2, 2: 3, 3: 4}), true);
+      expect(validator.validate({1: 2, 2: 3, 3: 4, 4: 5}), false);
+      expect(validator.validate(List.generate(100, (i) => i).asMap()), false);
+    });
+  });
+
+  group('"Object" validator', () {
+    test('Type check', () {
+      final validator = ObjectValidator();
+
+      expect(validator.validate({1: 2, 2: 3}), true);
+      expect(validator.validate({}), true);
+      expect(validator.validate([1, 2, 3].asMap()), true);
+      expect(validator.validate([1, 2, 3]), false);
+      expect(validator.validate([1, 2, 3].map((e) => e)), false);
+      expect(validator.validate(123), false);
+      expect(validator.validate('123'), false);
+    });
+
+    test('Null check', () {
+      final nonNullableValidator = ObjectValidator(nullable: false);
+
+      expect(nonNullableValidator.validate({1: 2, 2: 3}), true);
+      expect(nonNullableValidator.validate(null), false);
+
+      final nullableValidator = ObjectValidator(nullable: true);
+
+      expect(nullableValidator.validate({1: 2, 2: 3}), true);
+      expect(nullableValidator.validate(null), true);
+    });
+
+    test('Items validator (basic)', () {
+      final validator = ObjectValidator(
+        items: {
+          'x': NumberValidator(integer: true),
+          'y': NumberValidator(integer: true),
+        },
+      );
+
+      expect(validator.validate({'x': 1, 'y': 2}), true);
+      expect(validator.validate({'x': 1}), false);
+      expect(validator.validate({'x': 1, 'y': 2, 'z': 3}), true);
+      expect(validator.validate({'x': '1', 'y': '2'}), false);
+      expect(validator.validate({'i': 1, 'a': 2}), false);
+      expect(validator.validate({'a': 1}), false);
+      expect(validator.validate({}), false);
+    });
+
+    test('Items validator (complex)', () {
+      final countValidator = NumberValidator(
+        min: 0,
+        integer: true,
+      );
+      final urlValidator = StringValidator(
+        pattern: 'https://rickandmortyapi.com/api/character/?page',
+      );
+      final validator = ObjectValidator(
+        items: {
+          'info': ObjectValidator(items: {
+            'count': countValidator,
+            'pages': countValidator,
+            'next': urlValidator,
+            'prev': OrValidator([
+              urlValidator,
+              const NullValidator(),
+            ]),
+          }),
+        },
+      );
+
+      expect(
+        validator.validate({
+          'info': {
+            'count': 826,
+            'pages': 42,
+            'next': 'https://rickandmortyapi.com/api/character/?page=2',
+            'prev': null
+          }
+        }),
+        true,
+      );
+    });
+
+    test('Ignoring extra', () {
+      final validator = ObjectValidator(
+        items: {
+          'a': NumberValidator(integer: false),
+          'b': NumberValidator(integer: false),
+        },
+        ignoreExtra: false,
+      );
+
+      expect(validator.validate({'a': 1, 'b': 2}), true);
+      expect(validator.validate({'a': 1}), false);
+      expect(validator.validate({'a': 1, 'b': 2, 'c': 3}), false);
+    });
+
+    test('Ignoring extra on empty', () {
+      final validator = ObjectValidator(ignoreExtra: false);
+
+      expect(validator.validate({}), true);
+      expect(validator.validate({1: 2}), false);
     });
   });
 }

@@ -75,9 +75,7 @@ abstract class Validator {
   }) = MapValidator;
 
   factory Validator.object({
-    required Map<String, Validator> items,
-    int? maxItems,
-    int? minItems,
+    Map<String, Validator> items,
     bool ignoreExtra,
     bool nullable,
   }) = ObjectValidator;
