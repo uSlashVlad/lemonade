@@ -20,12 +20,12 @@ void main() {
     });
 
     test('Null check', () {
-      final nonNullableValidator = IterableValidator(nullable: false);
+      final nonNullableValidator = IterableValidator();
 
       expect(nonNullableValidator.validate([1, 2, 3]), true);
       expect(nonNullableValidator.validate(null), false);
 
-      final nullableValidator = IterableValidator(nullable: true);
+      final nullableValidator = IterableValidator().nullable();
 
       expect(nullableValidator.validate([1, 2, 3]), true);
       expect(nullableValidator.validate(null), true);
@@ -101,12 +101,12 @@ void main() {
     });
 
     test('Null check', () {
-      final nonNullableValidator = MapValidator(nullable: false);
+      final nonNullableValidator = MapValidator();
 
       expect(nonNullableValidator.validate({1: 2, 2: 3}), true);
       expect(nonNullableValidator.validate(null), false);
 
-      final nullableValidator = MapValidator(nullable: true);
+      final nullableValidator = MapValidator().nullable();
 
       expect(nullableValidator.validate({1: 2, 2: 3}), true);
       expect(nullableValidator.validate(null), true);
@@ -140,7 +140,7 @@ void main() {
     test('Key and value validators', () {
       final validator = MapValidator(
         key: StringValidator(minLength: 1, maxLength: 3),
-        value: NumberValidator(integer: false, max: 3, nullable: true),
+        value: NumberValidator(integer: false, max: 3).nullable(),
       );
 
       expect(validator.validate({'1': 2, '2': 3}), true);
@@ -200,12 +200,12 @@ void main() {
     });
 
     test('Null check', () {
-      final nonNullableValidator = ObjectValidator(nullable: false);
+      final nonNullableValidator = ObjectValidator();
 
       expect(nonNullableValidator.validate({1: 2, 2: 3}), true);
       expect(nonNullableValidator.validate(null), false);
 
-      final nullableValidator = ObjectValidator(nullable: true);
+      final nullableValidator = ObjectValidator().nullable();
 
       expect(nullableValidator.validate({1: 2, 2: 3}), true);
       expect(nullableValidator.validate(null), true);

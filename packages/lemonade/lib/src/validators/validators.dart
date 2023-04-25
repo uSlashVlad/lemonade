@@ -30,32 +30,27 @@ abstract class Validator {
     num? min,
     num? max,
     bool? integer,
-    bool nullable = false,
   }) =>
       NumberValidator(
         min: min,
         max: max,
         integer: false,
-        nullable: nullable,
       );
 
   factory Validator.integer({
     int? min,
     int? max,
-    bool nullable = false,
   }) =>
       NumberValidator(
         min: min,
         max: max,
         integer: true,
-        nullable: nullable,
       );
 
   factory Validator.string({
     int? maxLength,
     int? minLength,
     Pattern? pattern,
-    bool nullable,
   }) = StringValidator;
 
   factory Validator.list({
@@ -63,7 +58,6 @@ abstract class Validator {
     int? maxItems,
     int? minItems,
     bool uniqueItems,
-    bool nullable,
   }) = IterableValidator;
 
   factory Validator.map({
@@ -71,13 +65,11 @@ abstract class Validator {
     Validator value,
     int? maxItems,
     int? minItems,
-    bool nullable,
   }) = MapValidator;
 
   factory Validator.object({
     Map<String, Validator> items,
     bool ignoreExtra,
-    bool nullable,
   }) = ObjectValidator;
 
   factory Validator.or(List<Validator> children) = OrValidator;

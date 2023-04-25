@@ -6,11 +6,9 @@ abstract class CollectionValidator extends ValueValidator {
     required String collectionName,
     required String itemAnnotation,
     required Map<String, dynamic> properties,
-    required bool nullable,
   }) : super(
           typeName: '$collectionName of <$itemAnnotation>',
           properties: properties,
-          nullable: nullable,
         );
 }
 
@@ -20,7 +18,6 @@ class IterableValidator extends CollectionValidator {
     this.maxItems,
     this.minItems,
     this.uniqueItems = false,
-    bool nullable = false,
   }) : super(
           collectionName: 'list',
           itemAnnotation: item.expected,
@@ -29,7 +26,6 @@ class IterableValidator extends CollectionValidator {
             'minItems': minItems,
             'uniqueItems': uniqueItems,
           },
-          nullable: nullable,
         );
 
   final Validator item;
@@ -39,10 +35,7 @@ class IterableValidator extends CollectionValidator {
 
   @override
   bool validate(data) {
-    if (data is! Iterable?) return false;
-
-    if (isViolatesNull(data)) return false;
-    if (data == null) return true;
+    if (data is! Iterable) return false;
 
     if (maxItems != null && data.length > maxItems!) return false;
     if (minItems != null && data.length < minItems!) return false;
@@ -70,7 +63,6 @@ class MapValidator extends CollectionValidator {
     this.value = const AnyValidator(),
     this.maxItems,
     this.minItems,
-    bool nullable = false,
   }) : super(
           collectionName: 'map',
           itemAnnotation: '${key.expected}, ${value.expected}',
@@ -78,7 +70,6 @@ class MapValidator extends CollectionValidator {
             'maxItems': maxItems,
             'minItems': minItems,
           },
-          nullable: nullable,
         );
 
   final Validator key;
@@ -88,10 +79,7 @@ class MapValidator extends CollectionValidator {
 
   @override
   bool validate(data) {
-    if (data is! Map?) return false;
-
-    if (isViolatesNull(data)) return false;
-    if (data == null) return true;
+    if (data is! Map) return false;
 
     if (maxItems != null && data.length > maxItems!) return false;
     if (minItems != null && data.length < minItems!) return false;
@@ -109,14 +97,12 @@ class ObjectValidator extends ValueValidator {
   ObjectValidator({
     this.items = const {},
     this.ignoreExtra = true,
-    bool nullable = false,
   }) : super(
           typeName: 'object',
           properties: {
             // TODO(uSlashVlad): Add normal annotation for object
             'items': items,
           },
-          nullable: nullable,
         );
 
   final Map<String, Validator> items;
@@ -124,10 +110,7 @@ class ObjectValidator extends ValueValidator {
 
   @override
   bool validate(data) {
-    if (data is! Map?) return false;
-
-    if (isViolatesNull(data)) return false;
-    if (data == null) return true;
+    if (data is! Map) return false;
 
     if (!ignoreExtra && items.length != data.length) return false;
 

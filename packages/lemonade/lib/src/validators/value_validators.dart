@@ -1,20 +1,14 @@
+import 'package:lemonade/src/validators/compound_validators.dart';
+import 'package:lemonade/src/validators/other_validators.dart';
 import 'package:lemonade/src/validators/validators.dart';
 
 abstract class ValueValidator extends Validator {
   ValueValidator({
     required String typeName,
     required Map<String, dynamic> properties,
-    required this.nullable,
   }) : super(
-          expected: '$typeName ${_convertProperties(properties)}'
-              ', ${nullable ? 'nullable' : 'non-nullable'}',
+          expected: '$typeName ${_convertProperties(properties)}',
         );
-
-  final bool nullable;
-
-  bool isViolatesNull(dynamic data) {
-    return !nullable && data == null;
-  }
 
   static String _convertProperties(Map<String, dynamic> properties) {
     final strings = <String>[];
@@ -31,6 +25,8 @@ abstract class ValueValidator extends Validator {
     }
     return 'with ${strings.join(', ')}';
   }
+
+  Validator nullable() => OrValidator([this, const NullValidator()]);
 }
 
 class NumberValidator extends ValueValidator {
@@ -38,11 +34,9 @@ class NumberValidator extends ValueValidator {
     this.min,
     this.max,
     required this.integer,
-    bool nullable = false,
   }) : super(
           typeName: integer ? 'integer' : 'number',
           properties: {'min': min, 'max': max},
-          nullable: nullable,
         );
 
   // TODO(uSlashVlad): Add "multipleOf" property
@@ -52,10 +46,7 @@ class NumberValidator extends ValueValidator {
 
   @override
   bool validate(data) {
-    if (data is! num?) return false;
-
-    if (isViolatesNull(data)) return false;
-    if (data == null) return true;
+    if (data is! num) return false;
 
     if (integer && data is! int) {
       return false;
@@ -73,7 +64,6 @@ class StringValidator extends ValueValidator {
     this.maxLength,
     this.minLength,
     this.pattern,
-    bool nullable = false,
   }) : super(
           typeName: 'string',
           properties: {
@@ -81,7 +71,6 @@ class StringValidator extends ValueValidator {
             'minLength': minLength,
             'pattern': pattern
           },
-          nullable: nullable,
         );
 
   final int? maxLength;
@@ -90,10 +79,7 @@ class StringValidator extends ValueValidator {
 
   @override
   bool validate(data) {
-    if (data is! String?) return false;
-
-    if (isViolatesNull(data)) return false;
-    if (data == null) return true;
+    if (data is! String) return false;
 
     if (minLength != null && data.length < minLength!) return false;
     if (maxLength != null && data.length > maxLength!) return false;

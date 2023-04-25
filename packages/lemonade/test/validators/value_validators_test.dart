@@ -14,18 +14,12 @@ void main() {
       });
 
       test('Null check', () {
-        final nonNullableValidator = NumberValidator(
-          integer: false,
-          nullable: false,
-        );
+        final nonNullableValidator = NumberValidator(integer: false);
 
         expect(nonNullableValidator.validate(1.5), true);
         expect(nonNullableValidator.validate(null), false);
 
-        final nullableValidator = NumberValidator(
-          integer: false,
-          nullable: true,
-        );
+        final nullableValidator = NumberValidator(integer: false).nullable();
 
         expect(nullableValidator.validate(1.5), true);
         expect(nullableValidator.validate(null), true);
@@ -97,12 +91,12 @@ void main() {
     });
 
     test('Null check', () {
-      final nonNullableValidator = StringValidator(nullable: false);
+      final nonNullableValidator = StringValidator();
 
       expect(nonNullableValidator.validate('1'), true);
       expect(nonNullableValidator.validate(null), false);
 
-      final nullableValidator = StringValidator(nullable: true);
+      final nullableValidator = StringValidator().nullable();
 
       expect(nullableValidator.validate('1'), true);
       expect(nullableValidator.validate(null), true);
