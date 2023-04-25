@@ -1,3 +1,4 @@
+import 'package:lemonade/src/validators/other_validators.dart';
 import 'package:lemonade/src/validators/validators.dart';
 
 abstract class CollectionValidator extends ValueValidator {
@@ -15,7 +16,7 @@ abstract class CollectionValidator extends ValueValidator {
 
 class IterableValidator extends CollectionValidator {
   IterableValidator({
-    required this.item,
+    this.item = const AnyValidator(),
     this.maxItems,
     this.minItems,
     this.uniqueItems = false,
@@ -44,7 +45,7 @@ class IterableValidator extends CollectionValidator {
     if (data == null) return true;
 
     if (maxItems != null && data.length > maxItems!) return false;
-    if (minItems != null && data.length > minItems!) return false;
+    if (minItems != null && data.length < minItems!) return false;
 
     if (uniqueItems) {
       final valueSet = <dynamic>{};
@@ -65,8 +66,8 @@ class IterableValidator extends CollectionValidator {
 
 class MapValidator extends CollectionValidator {
   MapValidator({
-    required this.key,
-    required this.value,
+    this.key = const AnyValidator(),
+    this.value = const AnyValidator(),
     this.maxItems,
     this.minItems,
     bool nullable = false,
@@ -93,7 +94,7 @@ class MapValidator extends CollectionValidator {
     if (data == null) return true;
 
     if (maxItems != null && data.length > maxItems!) return false;
-    if (minItems != null && data.length > minItems!) return false;
+    if (minItems != null && data.length < minItems!) return false;
 
     for (final k in data.keys) {
       if (!key.validate(k)) return false;
@@ -125,7 +126,7 @@ class ObjectValidator extends ValueValidator {
   final int? maxItems;
   final int? minItems;
   final bool ignoreExtra;
-  
+
   @override
   bool validate(data) {
     if (data is! Map?) return false;
@@ -134,7 +135,7 @@ class ObjectValidator extends ValueValidator {
     if (data == null) return true;
 
     if (maxItems != null && data.length > maxItems!) return false;
-    if (minItems != null && data.length > minItems!) return false;
+    if (minItems != null && data.length < minItems!) return false;
 
     for (final key in data.keys) {
       if (key is! String) return false;

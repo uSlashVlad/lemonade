@@ -1,8 +1,10 @@
 import 'package:lemonade/src/validators/compound_validators.dart';
+import 'package:lemonade/src/validators/collections_validators.dart';
 import 'package:lemonade/src/validators/value_validators.dart';
 import 'package:lemonade/src/validators/other_validators.dart';
 
 export 'compound_validators.dart' show CompoundValidator;
+export 'collections_validators.dart' show CollectionValidator;
 export 'value_validators.dart' show ValueValidator;
 
 abstract class Validator {
@@ -55,6 +57,30 @@ abstract class Validator {
     Pattern? pattern,
     bool nullable,
   }) = StringValidator;
+
+  factory Validator.list({
+    Validator item,
+    int? maxItems,
+    int? minItems,
+    bool uniqueItems,
+    bool nullable,
+  }) = IterableValidator;
+
+  factory Validator.map({
+    Validator key,
+    Validator value,
+    int? maxItems,
+    int? minItems,
+    bool nullable,
+  }) = MapValidator;
+
+  factory Validator.object({
+    required Map<String, Validator> items,
+    int? maxItems,
+    int? minItems,
+    bool ignoreExtra,
+    bool nullable,
+  }) = ObjectValidator;
 
   factory Validator.or(List<Validator> children) = OrValidator;
 
