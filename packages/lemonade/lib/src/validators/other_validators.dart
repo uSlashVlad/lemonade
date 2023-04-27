@@ -1,33 +1,39 @@
+import 'package:lemonade/src/errors.dart';
 import 'package:lemonade/src/validators/validators.dart';
 
 class AnyValidator extends Validator {
-  const AnyValidator() : super(expected: 'anything');
+  const AnyValidator() : super(annotation: 'any');
 
   @override
-  bool validate(_) => true;
+  ValidationError? getError(data) {
+    return null;
+  }
 }
 
 class NullValidator extends Validator {
-  const NullValidator() : super(expected: 'null');
+  const NullValidator() : super(annotation: 'null');
 
   @override
-  bool validate(data) => data == null;
+  ValidationError? getError(data) {
+    if (data != null) {
+      return ValidationError(expected: 'null', actual: data);
+    }
+
+    return null;
+  }
 }
 
 class EqualsValidator extends Validator {
-  const EqualsValidator(this.matcher) : super(expected: 'equals $matcher');
+  const EqualsValidator(this.matcher) : super(annotation: '=$matcher');
 
   final Object? matcher;
 
   @override
-  bool validate(data) => data == matcher;
-}
+  ValidationError? getError(data) {
+    if (data != matcher) {
+      ValidationError(expected: matcher.toString(), actual: data);
+    }
 
-class OneOfValidator extends Validator {
-  const OneOfValidator(this.set) : super(expected: 'one of $set');
-
-  final Iterable<Object?> set;
-
-  @override
-  bool validate(data) => set.contains(data);
+    return null;
+  }
 }

@@ -1,15 +1,12 @@
+import 'package:lemonade/src/errors.dart';
 import 'package:lemonade/src/validators/other_validators.dart';
 import 'package:lemonade/src/validators/validators.dart';
 
 abstract class CollectionValidator extends ValueValidator {
-  CollectionValidator({
+  const CollectionValidator({
     required String collectionName,
     required String itemAnnotation,
-    required Map<String, dynamic> properties,
-  }) : super(
-          typeName: '$collectionName of <$itemAnnotation>',
-          properties: properties,
-        );
+  }) : super(typeName: '$collectionName of <$itemAnnotation>');
 }
 
 class IterableValidator extends CollectionValidator {
@@ -18,15 +15,7 @@ class IterableValidator extends CollectionValidator {
     this.maxItems,
     this.minItems,
     this.uniqueItems = false,
-  }) : super(
-          collectionName: 'list',
-          itemAnnotation: item.expected,
-          properties: {
-            'maxItems': maxItems,
-            'minItems': minItems,
-            'uniqueItems': uniqueItems,
-          },
-        );
+  }) : super(collectionName: 'list', itemAnnotation: item.annotation);
 
   final Validator item;
   final int? maxItems;
@@ -34,26 +23,41 @@ class IterableValidator extends CollectionValidator {
   final bool uniqueItems;
 
   @override
-  bool validate(data) {
-    if (data is! Iterable) return false;
+  ValidationError? getError(data) {
+    if (data is! Iterable) return typeError(data);
 
-    if (maxItems != null && data.length > maxItems!) return false;
-    if (minItems != null && data.length < minItems!) return false;
+    if (maxItems != null && data.length > maxItems!) {
+      return ValidationError(
+        expected: '$annotation length <= $maxItems',
+        actual: data,
+      );
+    }
+    if (minItems != null && data.length < minItems!) {
+      return ValidationError(
+        expected: '$annotation length >= $minItems',
+        actual: data,
+      );
+    }
 
     if (uniqueItems) {
       final valueSet = <dynamic>{};
       for (final value in data) {
-        if (!valueSet.add(value)) return false;
-
-        if (!item.validate(value)) return false;
-      }
-    } else {
-      for (final value in data) {
-        if (!item.validate(value)) return false;
+        if (!valueSet.add(value)) {
+          return ValidationError(expected: '$annotation unique', actual: data);
+        }
       }
     }
 
-    return true;
+    var i = 0;
+    for (final value in data) {
+      final error = item.getError(value);
+      if (error != null) {
+        return error.addStep('$annotation[$i]');
+      }
+      i++;
+    }
+
+    return null;
   }
 }
 
@@ -65,11 +69,7 @@ class MapValidator extends CollectionValidator {
     this.minItems,
   }) : super(
           collectionName: 'map',
-          itemAnnotation: '${key.expected}, ${value.expected}',
-          properties: {
-            'maxItems': maxItems,
-            'minItems': minItems,
-          },
+          itemAnnotation: '${key.annotation}, ${value.annotation}',
         );
 
   final Validator key;
@@ -78,18 +78,35 @@ class MapValidator extends CollectionValidator {
   final int? minItems;
 
   @override
-  bool validate(data) {
-    if (data is! Map) return false;
+  ValidationError? getError(data) {
+    if (data is! Map) return typeError(data);
 
-    if (maxItems != null && data.length > maxItems!) return false;
-    if (minItems != null && data.length < minItems!) return false;
-
-    for (final k in data.keys) {
-      if (!key.validate(k)) return false;
-      if (!value.validate(data[k])) return false;
+    if (maxItems != null && data.length > maxItems!) {
+      return ValidationError(
+        expected: '$annotation length <= $maxItems',
+        actual: data,
+      );
+    }
+    if (minItems != null && data.length < minItems!) {
+      return ValidationError(
+        expected: '$annotation length >= $minItems',
+        actual: data,
+      );
     }
 
-    return true;
+    for (final k in data.keys) {
+      final keyError = key.getError(data[k]);
+      if (keyError != null) {
+        return keyError.addStep('$annotation[$k].key');
+      }
+
+      final valueError = key.getError(data[k]);
+      if (valueError != null) {
+        return valueError.addStep('$annotation[$k].value');
+      }
+    }
+
+    return null;
   }
 }
 
@@ -97,27 +114,29 @@ class ObjectValidator extends ValueValidator {
   ObjectValidator({
     this.items = const {},
     this.ignoreExtra = true,
-  }) : super(
-          typeName: 'object',
-          properties: {
-            // TODO(uSlashVlad): Add normal annotation for object
-            'items': items,
-          },
-        );
+  }) : super(typeName: 'object');
 
   final Map<String, Validator> items;
   final bool ignoreExtra;
 
   @override
-  bool validate(data) {
-    if (data is! Map) return false;
+  ValidationError? getError(data) {
+    if (data is! Map) return typeError(data);
 
-    if (!ignoreExtra && items.length != data.length) return false;
-
-    for (final entry in items.entries) {
-      if (!entry.value.validate(data[entry.key])) return false;
+    if (!ignoreExtra && items.length != data.length) {
+      return ValidationError(
+        expected: '$annotation without extra fields',
+        actual: data,
+      );
     }
 
-    return true;
+    for (final entry in items.entries) {
+      final fieldError = entry.value.getError(data[entry.key]);
+      if (fieldError != null) {
+        return fieldError.addStep('$annotation.${entry.key}');
+      }
+    }
+
+    return null;
   }
 }

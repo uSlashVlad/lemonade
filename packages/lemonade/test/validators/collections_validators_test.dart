@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:lemonade/src/validators/collections_validators.dart';
 import 'package:lemonade/src/validators/compound_validators.dart';
 import 'package:lemonade/src/validators/other_validators.dart';
@@ -261,6 +263,19 @@ void main() {
         }),
         true,
       );
+    });
+
+    test('Items validator (json)', () {
+      final validator = ObjectValidator(
+        items: {
+          'x': NumberValidator(integer: true),
+          'y': NumberValidator(integer: true),
+        },
+      );
+
+      final parsedJson = jsonDecode('{"x":1,"y":2}');
+
+      expect(validator.validate(parsedJson), true);
     });
 
     test('Ignoring extra', () {

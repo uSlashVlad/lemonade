@@ -1,3 +1,4 @@
+import 'package:lemonade/src/errors.dart';
 import 'package:lemonade/src/validators/compound_validators.dart';
 import 'package:lemonade/src/validators/collections_validators.dart';
 import 'package:lemonade/src/validators/value_validators.dart';
@@ -8,23 +9,21 @@ export 'collections_validators.dart' show CollectionValidator;
 export 'value_validators.dart' show ValueValidator;
 
 abstract class Validator {
-  const Validator({required this.expected});
+  const Validator({required this.annotation});
+  
+  final String annotation;
 
-  final String expected;
-
-  bool validate(dynamic data);
-
-  String getValidationError(dynamic data) {
-    return '(expected $expected, got $data)';
+  bool validate(dynamic data) {
+    return getError(data) == null;
   }
+
+  ValidationError? getError(dynamic data);
 
   const factory Validator.any() = AnyValidator;
 
   const factory Validator.nullValue() = NullValidator;
 
   const factory Validator.equals(Object? matcher) = EqualsValidator;
-
-  const factory Validator.oneOf(Iterable<Object?> set) = OneOfValidator;
 
   factory Validator.number({
     num? min,
@@ -75,6 +74,8 @@ abstract class Validator {
   factory Validator.or(List<Validator> children) = OrValidator;
 
   factory Validator.and(List<Validator> children) = AndValidator;
+
+  Validator nullable() => OrValidator([this, const NullValidator()]);
 
   Validator operator |(Validator other) {
     return OrValidator([this, other]);

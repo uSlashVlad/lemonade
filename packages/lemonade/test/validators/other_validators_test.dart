@@ -35,16 +35,4 @@ void main() {
       expect(numValidator.validate(null), false);
     });
   });
-
-  group('"One of" validator', () {
-    test('validate', () {
-      final numValidator = OneOfValidator({1, 2, 4, 8});
-
-      expect(numValidator.validate(1), true);
-      expect(numValidator.validate(2), true);
-      expect(numValidator.validate(3), false);
-      expect(numValidator.validate('1'), false);
-      expect(numValidator.validate(null), false);
-    });
-  });
 }
