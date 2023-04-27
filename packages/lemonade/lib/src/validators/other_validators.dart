@@ -5,7 +5,7 @@ class AnyValidator extends Validator {
   const AnyValidator() : super(annotation: 'any');
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     return null;
   }
 }
@@ -14,7 +14,7 @@ class NullValidator extends Validator {
   const NullValidator() : super(annotation: 'null');
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data != null) {
       return ValidationError(expected: 'null', actual: data);
     }
@@ -29,7 +29,7 @@ class EqualsValidator extends Validator {
   final Object? matcher;
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data != matcher) {
       return ValidationError(expected: matcher.toString(), actual: data);
     }

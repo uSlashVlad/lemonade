@@ -7,8 +7,8 @@ void main() {
   group('"Or" validator', () {
     test('validate on simple', () {
       final validator = OrValidator([
-        EqualsValidator(123),
-        NullValidator(),
+        const EqualsValidator(123),
+        const NullValidator(),
       ]);
 
       expect(validator.validate(123), true);
@@ -19,10 +19,10 @@ void main() {
 
     test('validate on recursive', () {
       final validator = OrValidator([
-        EqualsValidator(123),
+        const EqualsValidator(123),
         OrValidator([
-          StringValidator(minLength: 1, maxLength: 5),
-          StringValidator(pattern: '111'),
+          const StringValidator(minLength: 1, maxLength: 5),
+          const StringValidator(pattern: '111'),
         ]),
       ]);
 
@@ -38,8 +38,8 @@ void main() {
   group('"And" validator', () {
     test('validate on simple', () {
       final validator = AndValidator([
-        NumberValidator(min: 0, max: 100, integer: true),
-        NumberValidator(min: 50, max: 200, integer: true),
+        const NumberValidator(min: 0, max: 100, integer: true),
+        const NumberValidator(min: 50, max: 200, integer: true),
       ]);
 
       expect(validator.validate(-50), false);
@@ -52,10 +52,10 @@ void main() {
 
     test('validate on recursive', () {
       final validator = AndValidator([
-        StringValidator(minLength: 1, maxLength: 10),
+        const StringValidator(minLength: 1, maxLength: 10),
         AndValidator([
-          StringValidator(pattern: '1'),
-          StringValidator(pattern: RegExp(r'^A')),
+          const StringValidator(pattern: '1'),
+          StringValidator(pattern: RegExp('^A')),
         ]),
       ]);
 

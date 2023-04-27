@@ -5,7 +5,7 @@ void main() {
   group('"Number" validator', () {
     group('Double', () {
       test('Type check', () {
-        final validator = NumberValidator(integer: false);
+        const validator = NumberValidator();
 
         expect(validator.validate(1), true);
         expect(validator.validate(1.1), true);
@@ -14,22 +14,19 @@ void main() {
       });
 
       test('Null check', () {
-        final nonNullableValidator = NumberValidator(integer: false);
+        const nonNullableValidator = NumberValidator();
 
         expect(nonNullableValidator.validate(1.5), true);
         expect(nonNullableValidator.validate(null), false);
 
-        final nullableValidator = NumberValidator(integer: false).nullable();
+        final nullableValidator = const NumberValidator().nullable();
 
         expect(nullableValidator.validate(1.5), true);
         expect(nullableValidator.validate(null), true);
       });
 
       test('Min constrains', () {
-        final validator = NumberValidator(
-          min: 100,
-          integer: false,
-        );
+        const validator = NumberValidator(min: 100);
 
         expect(validator.validate(10), false);
         expect(validator.validate(99.99), false);
@@ -38,9 +35,8 @@ void main() {
       });
 
       test('Max constrains', () {
-        final validator = NumberValidator(
+        const validator = NumberValidator(
           max: 100,
-          integer: false,
         );
 
         expect(validator.validate(10), true);
@@ -50,10 +46,9 @@ void main() {
       });
 
       test('Both constrains', () {
-        final validator = NumberValidator(
+        const validator = NumberValidator(
           min: 50,
           max: 100,
-          integer: false,
         );
 
         expect(validator.validate(-10), false);
@@ -66,7 +61,7 @@ void main() {
 
     group('Integer', () {
       test('Type check', () {
-        final validator = NumberValidator(integer: true);
+        const validator = NumberValidator(integer: true);
 
         expect(validator.validate(1), true);
         expect(validator.validate(10), true);
@@ -81,7 +76,7 @@ void main() {
 
   group('"String" validator', () {
     test('Type check', () {
-      final validator = StringValidator();
+      const validator = StringValidator();
 
       expect(validator.validate('1'), true);
       expect(validator.validate('Hello World'), true);
@@ -91,19 +86,19 @@ void main() {
     });
 
     test('Null check', () {
-      final nonNullableValidator = StringValidator();
+      const nonNullableValidator = StringValidator();
 
       expect(nonNullableValidator.validate('1'), true);
       expect(nonNullableValidator.validate(null), false);
 
-      final nullableValidator = StringValidator().nullable();
+      final nullableValidator = const StringValidator().nullable();
 
       expect(nullableValidator.validate('1'), true);
       expect(nullableValidator.validate(null), true);
     });
 
     test('Min constrains', () {
-      final validator = StringValidator(minLength: 3);
+      const validator = StringValidator(minLength: 3);
 
       expect(validator.validate('A'), false);
       expect(validator.validate('AAA'), true);
@@ -111,7 +106,7 @@ void main() {
     });
 
     test('Max constrains', () {
-      final validator = StringValidator(maxLength: 3);
+      const validator = StringValidator(maxLength: 3);
 
       expect(validator.validate('A'), true);
       expect(validator.validate('AAA'), true);
@@ -119,7 +114,7 @@ void main() {
     });
 
     test('Both constrains', () {
-      final validator = StringValidator(minLength: 3, maxLength: 6);
+      const validator = StringValidator(minLength: 3, maxLength: 6);
 
       expect(validator.validate('A'), false);
       expect(validator.validate('AAA'), true);
@@ -128,7 +123,7 @@ void main() {
     });
 
     test('String patterns', () {
-      final validator = StringValidator(pattern: '123');
+      const validator = StringValidator(pattern: '123');
 
       expect(validator.validate('123'), true);
       expect(validator.validate('123123'), true);

@@ -5,7 +5,7 @@ abstract class ValueValidator extends Validator {
   const ValueValidator({required String typeName})
       : super(annotation: typeName);
 
-  ValidationError? typeError(data) {
+  ValidationError? typeError(dynamic data) {
     return ValidationError(expected: annotation, actual: data);
   }
 }
@@ -14,7 +14,7 @@ class NumberValidator extends ValueValidator {
   const NumberValidator({
     this.min,
     this.max,
-    required this.integer,
+    this.integer = false,
   }) : super(typeName: integer ? 'integer' : 'number');
 
   // TODO(uSlashVlad): Add "multipleOf" property
@@ -69,7 +69,7 @@ class StringValidator extends ValueValidator {
 
     if (pattern != null && pattern!.allMatches(data).isEmpty) {
       final strPattern =
-          pattern is RegExp ? (pattern as RegExp).pattern : pattern.toString();
+          pattern is RegExp ? (pattern! as RegExp).pattern : pattern.toString();
       return ValidationError(
         expected: '$annotation matches $strPattern',
         actual: data,

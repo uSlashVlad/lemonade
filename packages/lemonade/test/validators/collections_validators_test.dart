@@ -35,7 +35,7 @@ void main() {
 
     test('Item validator', () {
       final validator = IterableValidator(
-        item: StringValidator(minLength: 1, maxLength: 3),
+        item: const StringValidator(minLength: 1, maxLength: 3),
       );
 
       expect(validator.validate([]), true);
@@ -116,7 +116,7 @@ void main() {
 
     test('Key validator', () {
       final validator = MapValidator(
-        key: NumberValidator(integer: false, max: 3),
+        key: const NumberValidator(max: 3),
       );
 
       expect(validator.validate({1: 20, 2: 30}), true);
@@ -128,7 +128,7 @@ void main() {
 
     test('Value validator', () {
       final validator = MapValidator(
-        value: NumberValidator(integer: false, max: 3),
+        value: const NumberValidator(max: 3),
       );
 
       expect(validator.validate({1: 2, 2: 3}), true);
@@ -141,8 +141,8 @@ void main() {
 
     test('Key and value validators', () {
       final validator = MapValidator(
-        key: StringValidator(minLength: 1, maxLength: 3),
-        value: NumberValidator(integer: false, max: 3).nullable(),
+        key: const StringValidator(minLength: 1, maxLength: 3),
+        value: const NumberValidator(max: 3).nullable(),
       );
 
       expect(validator.validate({'1': 2, '2': 3}), true);
@@ -216,8 +216,8 @@ void main() {
     test('Items validator (basic)', () {
       final validator = ObjectValidator(
         items: {
-          'x': NumberValidator(integer: true),
-          'y': NumberValidator(integer: true),
+          'x': const NumberValidator(integer: true),
+          'y': const NumberValidator(integer: true),
         },
       );
 
@@ -231,11 +231,11 @@ void main() {
     });
 
     test('Items validator (complex)', () {
-      final countValidator = NumberValidator(
+      const countValidator = NumberValidator(
         min: 0,
         integer: true,
       );
-      final urlValidator = StringValidator(
+      const urlValidator = StringValidator(
         pattern: 'https://rickandmortyapi.com/api/character/?page',
       );
       final validator = ObjectValidator(
@@ -248,7 +248,7 @@ void main() {
               urlValidator,
               const NullValidator(),
             ]),
-          }),
+          },),
         },
       );
 
@@ -268,8 +268,8 @@ void main() {
     test('Items validator (json)', () {
       final validator = ObjectValidator(
         items: {
-          'x': NumberValidator(integer: true),
-          'y': NumberValidator(integer: true),
+          'x': const NumberValidator(integer: true),
+          'y': const NumberValidator(integer: true),
         },
       );
 
@@ -281,8 +281,8 @@ void main() {
     test('Ignoring extra', () {
       final validator = ObjectValidator(
         items: {
-          'a': NumberValidator(integer: false),
-          'b': NumberValidator(integer: false),
+          'a': const NumberValidator(),
+          'b': const NumberValidator(),
         },
         ignoreExtra: false,
       );

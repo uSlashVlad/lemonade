@@ -1,23 +1,15 @@
 import 'package:lemonade/src/errors.dart';
-import 'package:lemonade/src/validators/compound_validators.dart';
 import 'package:lemonade/src/validators/collections_validators.dart';
-import 'package:lemonade/src/validators/value_validators.dart';
+import 'package:lemonade/src/validators/compound_validators.dart';
 import 'package:lemonade/src/validators/other_validators.dart';
+import 'package:lemonade/src/validators/value_validators.dart';
 
-export 'compound_validators.dart' show CompoundValidator;
 export 'collections_validators.dart' show CollectionValidator;
+export 'compound_validators.dart' show CompoundValidator;
 export 'value_validators.dart' show ValueValidator;
 
 abstract class Validator {
   const Validator({required this.annotation});
-  
-  final String annotation;
-
-  bool validate(dynamic data) {
-    return getError(data) == null;
-  }
-
-  ValidationError? getError(dynamic data);
 
   const factory Validator.any() = AnyValidator;
 
@@ -28,12 +20,10 @@ abstract class Validator {
   factory Validator.number({
     num? min,
     num? max,
-    bool? integer,
   }) =>
       NumberValidator(
         min: min,
         max: max,
-        integer: false,
       );
 
   factory Validator.integer({
@@ -74,6 +64,14 @@ abstract class Validator {
   factory Validator.or(List<Validator> children) = OrValidator;
 
   factory Validator.and(List<Validator> children) = AndValidator;
+
+  final String annotation;
+
+  bool validate(dynamic data) {
+    return getError(data) == null;
+  }
+
+  ValidationError? getError(dynamic data);
 
   Validator nullable() => OrValidator([this, const NullValidator()]);
 

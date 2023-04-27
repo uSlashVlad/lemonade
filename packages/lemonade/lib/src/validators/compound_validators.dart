@@ -13,10 +13,10 @@ abstract class CompoundValidator extends ValueValidator {
 }
 
 class OrValidator extends CompoundValidator {
-  OrValidator(List<Validator> children) : super(children, operator: 'or');
+  OrValidator(super.children) : super(operator: 'or');
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     for (final validator in children) {
       if (validator.validate(data)) return null;
     }
@@ -25,10 +25,10 @@ class OrValidator extends CompoundValidator {
 }
 
 class AndValidator extends CompoundValidator {
-  AndValidator(List<Validator> children) : super(children, operator: 'and');
+  AndValidator(super.children) : super(operator: 'and');
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     for (final validator in children) {
       if (!validator.validate(data)) return typeError(data);
     }

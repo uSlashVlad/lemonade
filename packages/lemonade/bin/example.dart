@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, avoid_print, avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:lemonade/lemonade.dart';
@@ -53,7 +55,7 @@ final locationValidator = Validator.object(
 );
 
 /// Example data that should be validated
-final exampleJson = '''
+const exampleJson = '''
 {
   "info": {
     "count": 826,

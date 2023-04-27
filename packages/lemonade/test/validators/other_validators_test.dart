@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('"Any" validator', () {
     test('validate', () {
-      final validator = AnyValidator();
+      const validator = AnyValidator();
 
       expect(validator.validate(1), true);
       expect(validator.validate('1'), true);
@@ -15,7 +15,7 @@ void main() {
 
   group('"Null" validator', () {
     test('validate', () {
-      final validator = NullValidator();
+      const validator = NullValidator();
 
       expect(validator.validate(1), false);
       expect(validator.validate('1'), false);
@@ -26,7 +26,7 @@ void main() {
 
   group('"Equals" validator', () {
     test('validate', () {
-      final numValidator = EqualsValidator(1);
+      const numValidator = EqualsValidator(1);
 
       expect(numValidator.validate(1), true);
       expect(numValidator.validate('1'), false);

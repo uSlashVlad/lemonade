@@ -23,7 +23,7 @@ class IterableValidator extends CollectionValidator {
   final bool uniqueItems;
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data is! Iterable) return typeError(data);
 
     if (maxItems != null && data.length > maxItems!) {
@@ -78,7 +78,7 @@ class MapValidator extends CollectionValidator {
   final int? minItems;
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data is! Map) return typeError(data);
 
     if (maxItems != null && data.length > maxItems!) {
@@ -120,7 +120,7 @@ class ObjectValidator extends ValueValidator {
   final bool ignoreExtra;
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data is! Map) return typeError(data);
 
     if (!ignoreExtra && items.length != data.length) {
