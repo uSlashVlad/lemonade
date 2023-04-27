@@ -18,9 +18,9 @@ class OrValidator extends CompoundValidator {
   @override
   ValidationError? getError(data) {
     for (final validator in children) {
-      if (validator.validate(data)) return typeError(data);
+      if (validator.validate(data)) return null;
     }
-    return null;
+    return typeError(data);
   }
 }
 

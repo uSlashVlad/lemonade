@@ -95,12 +95,12 @@ class MapValidator extends CollectionValidator {
     }
 
     for (final k in data.keys) {
-      final keyError = key.getError(data[k]);
+      final keyError = key.getError(k);
       if (keyError != null) {
         return keyError.addStep('$annotation[$k].key');
       }
 
-      final valueError = key.getError(data[k]);
+      final valueError = value.getError(data[k]);
       if (valueError != null) {
         return valueError.addStep('$annotation[$k].value');
       }

@@ -31,7 +31,7 @@ class EqualsValidator extends Validator {
   @override
   ValidationError? getError(data) {
     if (data != matcher) {
-      ValidationError(expected: matcher.toString(), actual: data);
+      return ValidationError(expected: matcher.toString(), actual: data);
     }
 
     return null;
