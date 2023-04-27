@@ -19,8 +19,7 @@ class ValidationError {
 
   @override
   String toString() {
-    final leaf = 'expected($expected, $actual)';
-    if (trace.isEmpty) return leaf;
-    return '${trace.join('.')}.$leaf';
+    final leaf = 'expected($expected).got($actual)';
+    return [...trace, leaf].join(' > ');
   }
 }

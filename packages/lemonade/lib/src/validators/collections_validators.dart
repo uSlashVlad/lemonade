@@ -6,7 +6,7 @@ abstract class CollectionValidator extends ValueValidator {
   const CollectionValidator({
     required String collectionName,
     required String itemAnnotation,
-  }) : super(typeName: '$collectionName of <$itemAnnotation>');
+  }) : super(typeName: '$collectionName<$itemAnnotation>');
 }
 
 class IterableValidator extends CollectionValidator {
