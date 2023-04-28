@@ -51,7 +51,7 @@ class StringValidator extends ValueValidator {
   final Pattern? pattern;
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data is! String) return typeError(data);
 
     if (minLength != null && data.length < minLength!) {

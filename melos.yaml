@@ -1,0 +1,4 @@
+name: lemonade
+
+packages:
+  - packages/lemonade
