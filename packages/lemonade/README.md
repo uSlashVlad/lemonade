@@ -1,12 +1,14 @@
 # lemonade
 
 Simple yet powerful library for data validation:
-- Fully typesafe and null-safe API
+- Fully compile-, type- and null-safe API
 - Universal for any standard data structures
 - Written in pure dart
 - 0 dependencies
 
+Mainly inspired by semantics of JSON Schema and [ajv](https://www.npmjs.com/package/ajv).
 
+<!--
 ## Get started 🚀
 
 First, add `lemonade` into `pubspec.yaml` file of your project:
@@ -31,6 +33,7 @@ import 'package:lemonade/lemonade.dart';
 ```
 
 And you are ready to go!
+-->
 
 ## Usage
 
@@ -85,3 +88,15 @@ String representation of the errors says that:
     - Got `"10.1"`
 
 It's easy to decode and trace an error in your data, isn't it?
+
+## Features and roadmap
+
+I started this project in my own urgent need to write huge amount of JSON validators.
+Then I tried to make it more universal so it can be used in other use cases.
+
+- [x] Validators for the most basic types
+- [ ] Built-in validators for most common data types
+- [ ] Built-in validators for custom data structures
+- [ ] Full backwards compatibility with JSON Schema
+- [ ] Automatic HTTP response validation on client-side
+- [ ] Automatic HTTP request validation on server-side

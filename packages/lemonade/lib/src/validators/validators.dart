@@ -178,12 +178,36 @@ abstract class Validator {
   /// Validates in the same order in which they are specified.
   factory Validator.and(List<Validator> children) = AndValidator;
 
+  /// String representation for validator.
+  /// Just a type name in the most cases.
   final String annotation;
 
+  /// Validates input data against this validator.
+  /// It returns true if validation passes, false otherwise.
+  ///
+  /// If you want to know, what exactly goes wrong when validation fails, use
+  /// [Validator.getError].
+  ///
+  /// It works with fail-fast principle.
+  /// It means that it stops validation on first occurred error.
+  /// But in general, it should not make any assumptions about validators order
+  /// as much as validators does not make any assumptions about your data.
   bool validate(dynamic data) {
     return getError(data) == null;
   }
 
+  /// Validates input data against this validator.
+  /// If validation fails, returns [ValidationError] that describes what
+  /// actually does not pass.
+  ///
+  /// If you want just check if validation passes, use [Validator.validate].
+  /// But if you want to debug validator or what is wrong with your data, it
+  /// might be the most useful way.
+  ///
+  /// It works with fail-fast principle.
+  /// It means that it stops validation on first occurred error.
+  /// But in general, it should not make any assumptions about validators order
+  /// as much as validators does not make any assumptions about your data.
   ValidationError? getError(dynamic data);
 
   /// Matches if either validator or [Validator.nullValue] passes validation.

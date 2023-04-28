@@ -1,3 +1,9 @@
+## 0.1.1
+
+- Added some dartdoc comments
+- Fixed example file path
+- Exported `ValidationError` class
+
 ## 0.1.0
 
 ### Initial version.
