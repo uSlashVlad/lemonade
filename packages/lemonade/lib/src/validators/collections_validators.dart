@@ -2,7 +2,21 @@ import 'package:lemonade/src/errors.dart';
 import 'package:lemonade/src/validators/other_validators.dart';
 import 'package:lemonade/src/validators/validators.dart';
 
+/// An abstract base class for validators that operate on collections.
+///
+/// A [CollectionValidator] should be used for validation that a value is a
+/// collection (e.g. a `List`, `Set`, or `Map`), containing items of a specific
+/// type.
+///
+/// The following properties are defined:
+///
+/// - `collectionName`: the name of the collection type being validated (e.g.
+/// `List` or `Set`).
+/// - `itemAnnotation`: the name of the annotation that describes the type of
+/// items in the collection.
 abstract class CollectionValidator extends ValueValidator {
+  /// Creates a new [CollectionValidator] instance with the given
+  /// [collectionName] and [itemAnnotation] values.
   const CollectionValidator({
     required String collectionName,
     required String itemAnnotation,

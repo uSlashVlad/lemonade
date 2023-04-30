@@ -1,4 +1,4 @@
-name: bloc_test
+name: Lemonade coverage
 
 on:
   push:
