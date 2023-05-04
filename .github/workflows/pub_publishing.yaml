@@ -10,6 +10,8 @@ jobs:
     permissions:
       id-token: write
     runs-on: ubuntu-latest
+    with:
+      working-directory: packages/lemonade
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1
