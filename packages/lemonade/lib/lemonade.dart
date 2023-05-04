@@ -1,5 +1,6 @@
 /// Base library for universal lemonade validators.
 library lemonade;
 
-export 'package:lemonade/src/errors.dart';
-export 'package:lemonade/src/validators/validators.dart';
+export 'src/errors.dart';
+export 'src/patterns/validators.dart';
+export 'src/validators/validators.dart';

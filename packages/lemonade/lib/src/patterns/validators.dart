@@ -160,7 +160,7 @@ abstract class Validators {
 
   /// This validates that a string value is a valid Hostname according to
   /// [RFC 952](https://tools.ietf.org/html/rfc952).
-  static Validator hostnameRFC952() =>
+  static Validator hostname() =>
       _validatorForRegex(r'^[a-z][a-z0-9\-\.]+[a-z0-9]$');
 
   /// This validates that a string value is a valid Hostname according to

@@ -8,32 +8,32 @@ Simple yet powerful library for data validation:
 
 Mainly inspired by semantics of JSON Schema and [ajv](https://www.npmjs.com/package/ajv).
 
-<!--
-## Get started 🚀
+## What is validation?
 
-First, add `lemonade` into `pubspec.yaml` file of your project:
+Validation - is a way to ensure that the data being used by the application is correct and can be used safely.
+It means that all properties of object are specified and look the way you would expect.
 
-```yaml
-dependencies:
-  lemonade: ^0.1.0
+Let's take an example of JSON data validation:
+
+```json5
+// Correct JSON
+{
+  "name": "John",
+  "age": 25,
+  "email": "john@example.com"
+}
 ```
 
-... or with simple command:
-
-```bash
-dart pub add lemonade
-# or for flutter project:
-flutter pub add lemonade
+```json5
+// Incorrect JSON
+{
+  "name": "John",
+  "age": "25", // String instead of number
+  "email": "john@example.com"
+}
 ```
 
-Then import it into your dart file:
-
-```dart
-import 'package:lemonade/lemonade.dart';
-```
-
-And you are ready to go!
--->
+If you write a validator for such object, you can 100% sure that data would look like 
 
 ## Usage
 
@@ -89,13 +89,44 @@ String representation of the errors says that:
 
 It's easy to decode and trace an error in your data, isn't it?
 
+## Common patterns
+
+Most of the time you come across some common data types: UUID, IP addresses, hexadecimal strings, etc.
+You can easily validate such data using this library!
+
+Here is `Validators` class for this:
+
+```dart
+final stringToCheck = 'd87955f3-42a8-43db-aea2-78c0e29e5d23';
+
+Validators.uuid().validate(stringToCheck);
+```
+
+It also can be easily used in complex and nested validators:
+
+```dart
+final structureToCheck = {
+  'ip': '127.0.0.1',
+  'mac': '0C:D3:86:34:34:66',
+};
+
+final validator = Validator.object(
+  items: {
+    'ip': Validators.ipv4(),
+    'mac': Validators.mac(),
+  },
+);
+
+validator.validate(structureToCheck);
+```
+
 ## Features and roadmap
 
 I started this project in my own urgent need to write huge amount of JSON validators.
-Then I tried to make it more universal so it can be used in other use cases.
+Then I tried to make it more universal, so it can be used in other use cases.
 
 - [x] Validators for the most basic types
-- [ ] Built-in validators for most common data types
+- [x] Built-in validators for most common data types
 - [ ] Built-in validators for custom data structures
 - [ ] Full backwards compatibility with JSON Schema
 - [ ] Automatic HTTP response validation on client-side
