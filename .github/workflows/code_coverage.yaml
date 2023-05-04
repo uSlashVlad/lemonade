@@ -1,13 +1,13 @@
-name: Lemonade coverage
+name: Coverage data
 
 on:
   push:
     paths:
       - "packages/lemonade/**"
-      - ".github/workflows/lemonade_coverage.yaml"
+      - ".github/workflows/code_coverage.yaml"
 
 jobs:
-  build:
+  lemonade-coverage:
     defaults:
       run:
         working-directory: packages/lemonade
