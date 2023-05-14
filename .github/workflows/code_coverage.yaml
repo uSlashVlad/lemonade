@@ -2,6 +2,8 @@ name: Coverage data
 
 on:
   push:
+    branches:
+      - 'main'
     paths:
       - "packages/lemonade/**"
       - ".github/workflows/code_coverage.yaml"
