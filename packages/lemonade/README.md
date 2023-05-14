@@ -6,7 +6,7 @@ Simple yet powerful library for data validation:
 - Written in pure dart
 - 0 dependencies
 
-Mainly inspired by semantics of JSON Schema and [ajv](https://www.npmjs.com/package/ajv).
+Main source of inspiration is JSON Schema and [ajv library](https://www.npmjs.com/package/ajv).
 
 ## What is validation?
 

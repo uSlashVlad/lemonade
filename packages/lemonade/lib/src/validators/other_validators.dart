@@ -37,3 +37,29 @@ class EqualsValidator extends Validator {
     return null;
   }
 }
+
+class CustomValueValidator extends Validator {
+  const CustomValueValidator(this.check) : super(annotation: 'custom value');
+
+  final bool Function(dynamic data) check;
+
+  @override
+  ValidationError? getError(dynamic data) {
+    if (!check(data)) {
+      return ValidationError(expected: annotation, actual: data);
+    }
+
+    return null;
+  }
+}
+
+class MapperValidator extends Validator {
+  MapperValidator({required this.mapper, required this.next})
+      : super(annotation: next.annotation);
+
+  final Object? Function(dynamic data) mapper;
+  final Validator next;
+
+  @override
+  ValidationError? getError(dynamic data) => next.getError(mapper(data));
+}

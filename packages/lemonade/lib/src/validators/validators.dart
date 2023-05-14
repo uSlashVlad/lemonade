@@ -29,6 +29,30 @@ abstract class Validator {
   /// With usage of [Validator.or] can be used to match enum values.
   const factory Validator.equals(Object? matcher) = EqualsValidator;
 
+  /// Matches only values that passed specified [check].
+  ///
+  /// Should be generally used for custom classes.
+  /// Also can be useful in cases when you want validate some very specific
+  /// property of default data type.
+  /// In second case, it would be very cool to
+  /// [fill issue on GitHub](https://github.com/uSlashVlad/lemonade/issues/new/choose),
+  /// explaining your use case.
+  ///
+  /// [check] must return true if data matches what you expect, otherwise false.
+  const factory Validator.customValue(bool Function(dynamic data) check) =
+      CustomValueValidator;
+
+  /// Converts data using [mapper] and then passes it to [next] validator.
+  ///
+  /// Can be useful when it is necessary to convert data inside collections or
+  /// other complex data structures.
+  /// Can also be effectively used with [Validator.customValue] to map custom
+  /// classes.
+  factory Validator.mapping({
+    required Object? Function(dynamic data) mapper,
+    required Validator next,
+  }) = MapperValidator;
+
   /// Matches only numbers (both double and integers).
   ///
   /// [min] - minimal number value.
