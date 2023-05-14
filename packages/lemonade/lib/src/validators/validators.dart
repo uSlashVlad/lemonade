@@ -283,6 +283,16 @@ abstract class Validator {
   /// useless).
   Validator nullable() => OrValidator([this, const NullValidator()]);
 
+  /// Matches if validator doesn't pass validation.
+  ///
+  /// Can be used when it is necessary to invert the statement.
+  /// For example "everything except null" will look like this:
+  /// ```dart
+  /// Validator.nullValue.not()
+  /// ```
+  // ignore: use_to_and_as_if_applicable
+  Validator not() => InvertingValidator(this);
+
   /// Matches if either this or [other] passes validation.
   /// Similar to "||" operator in boolean expressions.
   ///

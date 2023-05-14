@@ -1,6 +1,7 @@
 ## 0.3.0
 
 - Added `mapping`, `customValue` and `datetime` validators
+- Added `not` method for inverting any validator
 
 ## 0.2.0
 
@@ -22,7 +23,7 @@ Currently supported this common patterns taken mostly from golang
 
 ## 0.1.0
 
-### Initial version.
+**Initial version**
 
 - Value validators: strings, numbers
 - Collection validators: lists, maps

@@ -38,6 +38,21 @@ class EqualsValidator extends Validator {
   }
 }
 
+class InvertingValidator extends Validator {
+  InvertingValidator(this.base) : super(annotation: 'not ${base.annotation}');
+
+  final Validator base;
+
+  @override
+  ValidationError? getError(dynamic data) {
+    if (base.validate(data)) {
+      return ValidationError(expected: annotation, actual: data);
+    }
+
+    return null;
+  }
+}
+
 class CustomValueValidator extends Validator {
   const CustomValueValidator(this.check) : super(annotation: 'custom value');
 
