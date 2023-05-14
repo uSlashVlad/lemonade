@@ -1,5 +1,8 @@
 # lemonade
 
+[![Pub](https://img.shields.io/pub/v/lemonade.svg)](https://pub.dev/packages/bloc)
+[![codecov](https://codecov.io/gh/uSlashVlad/lemonade/branch/main/graph/badge.svg?token=3N68H7WOFF)](https://codecov.io/gh/uSlashVlad/lemonade)
+
 Simple yet powerful library for data validation:
 - Fully compile-, type- and null-safe API
 - Universal for any standard data structures
@@ -120,6 +123,112 @@ final validator = Validator.object(
 validator.validate(structureToCheck);
 ```
 
+## Custom validators
+
+Sometimes you want to validate some custom data structures (your own classes for example).
+lemonade gives you two ways of doing so:
+
+1. Create universal, reusable validator class
+2. Use `Validator.customValue` factory
+
+### Universal validator class
+
+lemonade exports some validator abstract classes that you can extend in order to implement custom validators:
+`Validator`, `ValueValidator`, `CollectionValidator`, `CompoundValidator`.
+
+Validation work similar way in all of them:
+`getError` have to be overridden,
+if it returns `null`, data is valid,
+if it returns `ValidationError`, data is invalid.
+`annotation` have to be specified, so you stringify validator and watch, what does it validate.
+
+`ValidationError` has 2 required fields: `expected` and `actual` (like in dart tests).
+In `actual`, you should specify value that was checked.
+In `expected`, you should specify the criteria of valid data.
+
+For example, you want to check that number is even.
+Firstly you have to check if data is number, then you have to check evenness.
+Implementation would look like this:
+
+```dart
+class EvennessValidator extends Validator {
+  EvennessValidator() : super(annotation: 'even number');
+
+  @override
+  ValidationError? getError(dynamic data) {
+    if (data is! int) {
+      // We expected number, got something else
+      return ValidationError(expected: 'number', actual: data);
+    }
+
+    if (!data.isEven) {
+      // We expected even number, got odd
+      return ValidationError(expected: 'even number', actual: data);
+    }
+
+    // If everything is ok, return null.
+    return null;
+  }
+}
+```
+
+Then you can use it like this:
+
+```dart
+// Create a new instance of validator
+final validator = EvennessValidator();
+// Use default methods of it
+validator.validate(14);
+```
+
+This approach has major pros:
+
+- Validators look and work the same as the default ones
+- Validation errors are more descriptive and customizable
+- Validators can be easily reused
+
+But also several cons:
+
+- More customization and overall code required
+- It isn't so easy to use for one-time only validators
+
+### Validator.customValue
+
+If you just want to make things done,
+you don't need to understand what exactly is invalid
+and this validator will be used exactly one time,
+than it would be easier to use simple `Validator.customValue` factory.
+
+For validator that checks if number is even code would look like this:
+
+```dart
+// Create a new instance of validator
+final validator = Validator.customValue((data) {
+  if (data is! int) return false;
+
+  if (!data.isEven) return false;
+
+  return true;
+});
+// Use default methods of it
+validator.validate(14);
+```
+
+And that's all! So easy!
+
+So this approach has such pros:
+
+- Less code to write
+- No customization, tuning, descriptions
+- Can use the same callback as for `where` method in `Iterable`
+
+But also there is cons:
+
+- Can't be easily reused
+- Results in less consistent code
+
+[//]: # (TODO: Add info about mappers)
+
 ## Features and roadmap
 
 I started this project in my own urgent need to write huge amount of JSON validators.
@@ -127,7 +236,7 @@ Then I tried to make it more universal, so it can be used in other use cases.
 
 - [x] Validators for the most basic types
 - [x] Built-in validators for most common data types
-- [ ] Built-in validators for custom data structures
+- [x] Built-in validators for custom data structures
 - [ ] Full backwards compatibility with JSON Schema
 - [ ] Automatic HTTP response validation on client-side
 - [ ] Automatic HTTP request validation on server-side

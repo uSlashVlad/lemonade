@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Added `mapping`, `customValue` and `datetime` validators
+
 ## 0.2.0
 
 - Added most common patterns to use with `Validators` class
