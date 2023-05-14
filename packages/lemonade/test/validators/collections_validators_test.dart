@@ -7,7 +7,7 @@ import 'package:lemonade/src/validators/value_validators.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('"Iterable" validator', () {
+  group('Iterable validator', () {
     test('Type check', () {
       final validator = IterableValidator();
 
@@ -89,7 +89,7 @@ void main() {
     });
   });
 
-  group('"Map" validator', () {
+  group('Map validator', () {
     test('Type check', () {
       final validator = MapValidator();
 
@@ -188,7 +188,7 @@ void main() {
     });
   });
 
-  group('"Object" validator', () {
+  group('Object validator', () {
     test('Type check', () {
       final validator = ObjectValidator();
 

@@ -4,7 +4,7 @@ import 'package:lemonade/src/validators/value_validators.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('"Or" validator', () {
+  group('Or validator', () {
     test('validate on simple', () {
       final validator = OrValidator([
         const EqualsValidator(123),
@@ -35,7 +35,7 @@ void main() {
     });
   });
 
-  group('"And" validator', () {
+  group('And validator', () {
     test('validate on simple', () {
       final validator = AndValidator([
         const NumberValidator(min: 0, max: 100, integer: true),

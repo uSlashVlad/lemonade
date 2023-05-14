@@ -2,7 +2,7 @@ import 'package:lemonade/src/validators/value_validators.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('"Number" validator', () {
+  group('Number validator', () {
     group('Double', () {
       test('Type check', () {
         const validator = NumberValidator();
@@ -74,7 +74,7 @@ void main() {
     });
   });
 
-  group('"String" validator', () {
+  group('String validator', () {
     test('Type check', () {
       const validator = StringValidator();
 
@@ -141,5 +141,125 @@ void main() {
       expect(validator.validate('123123'), false);
       expect(validator.validate(''), false);
     });
+  });
+
+  group('DateTime validator', () {
+    final templateDates = [
+      DateTime(1971, 04, 09),
+      DateTime(1973, 06, 17),
+      DateTime(1979, 03, 09),
+      DateTime(1992, 11, 13),
+      DateTime(1995, 05, 06),
+      DateTime(2000, 10, 25),
+      DateTime(2003, 10, 01),
+      DateTime(2008, 07, 24),
+      DateTime(2018, 10, 03),
+      DateTime(2022, 10, 26),
+    ];
+
+    test('Type check', () {
+      const validator = DateTimeValidator();
+
+      expect(validator.validate(DateTime.now()), true);
+      expect(
+        validator.validate(DateTime.fromMillisecondsSinceEpoch(1684090002000)),
+        true,
+      );
+      expect(validator.validate('1684090002'), false);
+      expect(validator.validate('2023-05-14T18:46:42+00:00'), false);
+      expect(validator.validate(1684090002), false);
+      expect(validator.validate(true), false);
+      expect(validator.validate(validator), false);
+    });
+
+    test('Before time', () {
+      final validator = DateTimeValidator(before: DateTime(2002, 12, 09));
+
+      expect(validator.validate(templateDates[0]), true);
+      expect(validator.validate(templateDates[1]), true);
+      expect(validator.validate(templateDates[2]), true);
+      expect(validator.validate(templateDates[3]), true);
+      expect(validator.validate(templateDates[4]), true);
+      expect(validator.validate(templateDates[5]), true);
+      expect(validator.validate(templateDates[6]), false);
+      expect(validator.validate(templateDates[7]), false);
+      expect(validator.validate(templateDates[8]), false);
+      expect(validator.validate(templateDates[9]), false);
+    });
+
+    test('After time', () {
+      final validator = DateTimeValidator(after: DateTime(1996, 02, 29));
+
+      expect(validator.validate(templateDates[0]), false);
+      expect(validator.validate(templateDates[1]), false);
+      expect(validator.validate(templateDates[2]), false);
+      expect(validator.validate(templateDates[3]), false);
+      expect(validator.validate(templateDates[4]), false);
+      expect(validator.validate(templateDates[5]), true);
+      expect(validator.validate(templateDates[6]), true);
+      expect(validator.validate(templateDates[7]), true);
+      expect(validator.validate(templateDates[8]), true);
+      expect(validator.validate(templateDates[9]), true);
+    });
+
+    test('Both time constrains', () {
+      final validator = DateTimeValidator(
+        before: DateTime(2002, 12, 09),
+        after: DateTime(1996, 02, 29),
+      );
+
+      expect(validator.validate(templateDates[0]), false);
+      expect(validator.validate(templateDates[1]), false);
+      expect(validator.validate(templateDates[2]), false);
+      expect(validator.validate(templateDates[3]), false);
+      expect(validator.validate(templateDates[4]), false);
+      expect(validator.validate(templateDates[5]), true);
+      expect(validator.validate(templateDates[6]), false);
+      expect(validator.validate(templateDates[7]), false);
+      expect(validator.validate(templateDates[8]), false);
+      expect(validator.validate(templateDates[9]), false);
+    });
+
+    test('UTC time', () {
+      const validator = DateTimeValidator(utc: true);
+
+      expect(validator.validate(DateTime.now()), false);
+      expect(validator.validate(DateTime.now().toUtc()), true);
+      expect(
+        validator.validate(DateTime.fromMillisecondsSinceEpoch(1684090002000)),
+        false,
+      );
+      expect(
+        validator.validate(
+          DateTime.fromMillisecondsSinceEpoch(
+            1684090002000,
+            isUtc: true,
+          ),
+        ),
+        true,
+      );
+    });
+
+    test('Non UTC time', () {
+      const validator = DateTimeValidator(utc: true);
+
+      expect(validator.validate(DateTime.now()), true);
+      expect(validator.validate(DateTime.now().toUtc()), false);
+      expect(
+        validator.validate(DateTime.fromMillisecondsSinceEpoch(1684090002000)),
+        true,
+      );
+      expect(
+        validator.validate(
+          DateTime.fromMillisecondsSinceEpoch(
+            1684090002000,
+            isUtc: true,
+          ),
+        ),
+        false,
+      );
+    });
+
+    // TODO(uSlashVlad): Add tests for "in..." properties.
   });
 }
