@@ -90,3 +90,108 @@ class StringValidator extends ValueValidator {
     return null;
   }
 }
+
+class DateTimeValidator extends ValueValidator {
+  const DateTimeValidator({
+    this.before,
+    this.after,
+    this.utc,
+    this.inYears,
+    this.inMonths,
+    this.inDays,
+    this.inWeekdays,
+    this.inHours,
+    this.inMinutes,
+    this.inSeconds,
+  }) : super(typeName: 'datetime');
+
+  final DateTime? before;
+  final DateTime? after;
+
+  final bool? utc;
+
+  final Set<int>? inYears;
+  final Set<int>? inMonths;
+  final Set<int>? inDays;
+  final Set<int>? inWeekdays;
+  final Set<int>? inHours;
+  final Set<int>? inMinutes;
+  final Set<int>? inSeconds;
+
+  @override
+  ValidationError? getError(dynamic data) {
+    if (data is! DateTime) return typeError(data);
+
+    if (before != null && !data.isBefore(before!)) {
+      return ValidationError(
+        expected: '$annotation before $before',
+        actual: data,
+      );
+    }
+
+    if (after != null && !data.isAfter(after!)) {
+      return ValidationError(
+        expected: '$annotation after $after',
+        actual: data,
+      );
+    }
+
+    if (utc != null && data.isUtc == utc) {
+      return ValidationError(
+        expected: '$annotation ${utc! ? 'is' : 'is not'} UTC',
+        actual: data,
+      );
+    }
+
+    if (inYears != null && !inYears!.contains(data.year)) {
+      return ValidationError(
+        expected: '$annotation in $inYears years',
+        actual: data,
+      );
+    }
+
+    if (inMonths != null && !inMonths!.contains(data.month)) {
+      return ValidationError(
+        expected: '$annotation in $inMonths months',
+        actual: data,
+      );
+    }
+
+    if (inDays != null && !inDays!.contains(data.day)) {
+      return ValidationError(
+        expected: '$annotation in $inDays days',
+        actual: data,
+      );
+    }
+
+    if (inWeekdays != null && !inWeekdays!.contains(data.weekday)) {
+      return ValidationError(
+        expected: '$annotation in $inWeekdays weekdays',
+        actual: data,
+      );
+    }
+
+    if (inHours != null && !inHours!.contains(data.hour)) {
+      return ValidationError(
+        expected: '$annotation in $inHours hours',
+        actual: data,
+      );
+    }
+
+    if (inMinutes != null && !inMinutes!.contains(data.minute)) {
+      return ValidationError(
+        expected: '$annotation in $inMinutes minutes',
+        actual: data,
+      );
+    }
+
+    if (inSeconds != null && !inSeconds!.contains(data.second)) {
+      return ValidationError(
+        expected: '$annotation in $inSeconds seconds',
+        actual: data,
+      );
+    }
+
+    return null;
+  }
+}

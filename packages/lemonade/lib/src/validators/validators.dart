@@ -124,6 +124,48 @@ abstract class Validator {
     Pattern? pattern,
   }) = StringValidator;
 
+  /// Matches only DateTime.
+  ///
+  /// [before] - specifies DateTime before which validation will pass.
+  ///
+  /// [after] - specifies DateTime after which validation will pass.
+  ///
+  /// [utc] - specifies if DateTime have to be in UTC timezone.
+  ///
+  /// [inYears] - years, for which date will pass validation.
+  /// Allowed values: years that can be represented by dart DateTime.
+  ///
+  /// [inMonths] - months, for which date will pass validation.
+  /// Allowed values: integers from 1 to 12.
+  ///
+  /// [inDays] - days, for which date will pass validation.
+  /// Allowed values: days that can be represented by dart DateTime (generally
+  /// from 1 to 31).
+  ///
+  /// [inWeekdays] - weekdays, for which date will pass validation.
+  /// Allowed values: integers from 1 to 7.
+  ///
+  /// [inHours] - hours, for which date will pass validation.
+  /// Allowed values: integers from 0 to 23.
+  ///
+  /// [inMinutes] - minutes, for which date will pass validation.
+  /// Allowed values: integers from 0 to 59.
+  ///
+  /// [inSeconds] - seconds, for which date will pass validation.
+  /// Allowed values: integers from 0 to 59.
+  factory Validator.datetime({
+    DateTime? before,
+    DateTime? after,
+    bool? utc,
+    Set<int>? inYears,
+    Set<int>? inMonths,
+    Set<int>? inDays,
+    Set<int>? inWeekdays,
+    Set<int>? inHours,
+    Set<int>? inMinutes,
+    Set<int>? inSeconds,
+  }) = DateTimeValidator;
+
   /// Matches only [Iterable].
   /// Does not do any assumptions about [Iterable] subclasses.
   /// So it works for [List], [Set], [Queue], [LinkedList] and other classes.
