@@ -241,7 +241,7 @@ void main() {
     });
 
     test('Non UTC time', () {
-      const validator = DateTimeValidator(utc: true);
+      const validator = DateTimeValidator(utc: false);
 
       expect(validator.validate(DateTime.now()), true);
       expect(validator.validate(DateTime.now().toUtc()), false);

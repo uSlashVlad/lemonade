@@ -136,7 +136,7 @@ class DateTimeValidator extends ValueValidator {
       );
     }
 
-    if (utc != null && data.isUtc == utc) {
+    if (utc != null && data.isUtc != utc) {
       return ValidationError(
         expected: '$annotation ${utc! ? 'is' : 'is not'} UTC',
         actual: data,
