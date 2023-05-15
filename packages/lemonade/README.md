@@ -1,15 +1,20 @@
 # lemonade
 
-[![Pub](https://img.shields.io/pub/v/lemonade.svg)](https://pub.dev/packages/bloc)
+[![Pub](https://img.shields.io/pub/v/lemonade.svg)](https://pub.dev/packages/lemonade)
 [![codecov](https://codecov.io/gh/uSlashVlad/lemonade/branch/main/graph/badge.svg?token=3N68H7WOFF)](https://codecov.io/gh/uSlashVlad/lemonade)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Simple yet powerful library for data validation:
-- Fully compile-, type- and null-safe API
-- Universal for any standard data structures
-- Written in pure dart
-- 0 dependencies
+- 🔧 **Universal**: Can be used for both standard data structures and any custom data
+- 🧩 **Extensible**: Functionality can be easily expanded to any synchronous validation use case
+- 🛡️ **Safe**: No more runtime bugs because of typos or null values in JSON
+- ✅ **More than 80% of tests coverage**
+- ✏️ **Written in pure dart**
+- 🎈 **0 dependencies**
 
 Main source of inspiration is JSON Schema and [ajv library](https://www.npmjs.com/package/ajv).
+
+---
 
 ## What is validation?
 
@@ -18,7 +23,7 @@ It means that all properties of object are specified and look the way you would 
 
 Let's take an example of JSON data validation:
 
-```json5
+```json
 // Correct JSON
 {
   "name": "John",
@@ -27,7 +32,7 @@ Let's take an example of JSON data validation:
 }
 ```
 
-```json5
+```json
 // Incorrect JSON
 {
   "name": "John",
