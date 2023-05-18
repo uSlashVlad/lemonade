@@ -101,8 +101,6 @@ void main() {
   group('Validators.base64()', () {
     test('base64() returns true for valid input', () {
       expect(Validators.base64().validate('dGVzdA=='), true);
-      expect(Validators.base64().validate('dGVzdA'), true);
-      expect(Validators.base64().validate('dGVzdA+'), true);
       expect(Validators.base64().validate('dGVzdA+/'), true);
       expect(Validators.base64().validate('/9j/4AAQSkZJRgABAgEBLAEsAAD/'), true);
       expect(Validators.base64().validate('c29tZSBkYXRhIHdpdGggACBhbmQg77u/'), true);
@@ -112,7 +110,6 @@ void main() {
       expect(Validators.base64().validate('dGVzdA='), false);
       expect(Validators.base64().validate('dGVzdA+=='), false);
       expect(Validators.base64().validate('dGVzdA+/=='), false);
-      expect(Validators.base64().validate('dGVzdA+/'), false);
       expect(Validators.base64().validate('dGVzdA+'), false);
       expect(Validators.base64().validate('dGVzdA'), false);
       expect(Validators.base64().validate('test data'), false);
