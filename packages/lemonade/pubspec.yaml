@@ -1,6 +1,6 @@
 name: lemonade
 description: Simple, typesafe, object-oriented library for data validation
-version: 0.3.0
+version: 0.3.1
 repository: https://github.com/uSlashVlad/lemonade
 
 environment:
@@ -8,4 +8,4 @@ environment:
 
 dev_dependencies:
   test: ^1.24.2
-  very_good_analysis: ^4.0.0
+  very_good_analysis: ^5.0.0

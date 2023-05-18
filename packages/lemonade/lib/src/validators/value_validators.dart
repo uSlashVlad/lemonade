@@ -34,7 +34,7 @@ class NumberValidator extends ValueValidator {
   final bool integer;
 
   @override
-  ValidationError? getError(data) {
+  ValidationError? getError(dynamic data) {
     if (data is! num) return typeError(data);
 
     if (integer && data is! int) return typeError(data);

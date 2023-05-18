@@ -132,7 +132,8 @@ abstract class Validators {
 
   /// This validates that a string value contains a valid longitude.
   static Validator longitudeStr() => _validatorForRegex(
-      r'^[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$');
+        r'^[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$',
+      );
 
   /// This validates that a string value contains a valid U.S. Social Security
   /// Number.

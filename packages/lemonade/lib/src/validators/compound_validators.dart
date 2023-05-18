@@ -26,7 +26,6 @@ abstract class CompoundValidator extends ValueValidator {
   }
 }
 
-
 class OrValidator extends CompoundValidator {
   OrValidator(super.children) : super(operator: 'or');
 

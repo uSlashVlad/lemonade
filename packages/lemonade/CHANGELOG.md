@@ -1,3 +1,9 @@
+## 0.3.1
+
+- Wrote more tests
+- Fixed `Validators.email` and `Validators.base64` validators
+- Updated dev dependencies
+
 ## 0.3.0
 
 - Added `mapping`, `customValue` and `datetime` validators

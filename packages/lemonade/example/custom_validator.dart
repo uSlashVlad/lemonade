@@ -61,7 +61,8 @@ void main() {
   // you can validate with it like with any other lemonade validator.
   final universalValidator = BookValidator();
   print(
-      'Validates book universal way = ${universalValidator.validate(newBook)}');
+    'Validates book universal way = ${universalValidator.validate(newBook)}',
+  );
 
   // But you can do it simpler, less universal way.
   final simplerValidator = Validator.customValue((data) {
