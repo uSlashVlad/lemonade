@@ -240,15 +240,17 @@ void main() {
       );
       final validator = ObjectValidator(
         items: {
-          'info': ObjectValidator(items: {
-            'count': countValidator,
-            'pages': countValidator,
-            'next': urlValidator,
-            'prev': OrValidator([
-              urlValidator,
-              const NullValidator(),
-            ]),
-          },),
+          'info': ObjectValidator(
+            items: {
+              'count': countValidator,
+              'pages': countValidator,
+              'next': urlValidator,
+              'prev': OrValidator([
+                urlValidator,
+                const NullValidator(),
+              ]),
+            },
+          ),
         },
       );
 

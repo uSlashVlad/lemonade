@@ -74,7 +74,7 @@ abstract class Validators {
       );
 
   /// This validates that a string value contains a valid bitcoin address.
-  /// The format of the string is checked to ensure it matches one of the th`ree
+  /// The format of the string is checked to ensure it matches one of the three
   /// formats P2PKH, P2SH.
   static Validator btcAddress() => _validatorForRegex(
         r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$',

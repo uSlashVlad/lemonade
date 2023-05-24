@@ -151,7 +151,7 @@ void main() {
       DateTime(1992, 11, 13),
       DateTime(1995, 05, 06),
       DateTime(2000, 10, 25),
-      DateTime(2003, 10, 01),
+      DateTime(2003, 10),
       DateTime(2008, 07, 24),
       DateTime(2018, 10, 03),
       DateTime(2022, 10, 26),

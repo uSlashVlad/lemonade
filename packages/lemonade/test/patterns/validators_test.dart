@@ -78,43 +78,138 @@ void main() {
 
   group('Validators.email()', () {
     test('email() returns true for valid input', () {
-      expect(Validators.email().validate('test@example.com'), true);
-      expect(Validators.email().validate('test+filter@example.com'), true);
-      expect(Validators.email().validate('test-123@example.com'), true);
-      expect(Validators.email().validate('test.123@example.com'), true);
-      expect(Validators.email().validate('test@example.co.uk'), true);
-      expect(Validators.email().validate('test@example.io'), true);
+      final validator = Validators.email();
+      expect(validator.validate('test@example.com'), true);
+      expect(validator.validate('test+filter@example.com'), true);
+      expect(validator.validate('test-123@example.com'), true);
+      expect(validator.validate('test.123@example.com'), true);
+      expect(validator.validate('test@example.co.uk'), true);
+      expect(validator.validate('test@example.io'), true);
     });
 
     test('email() returns false for invalid input', () {
-      expect(Validators.email().validate('invalid_email'), false);
-      expect(Validators.email().validate('test@example'), false);
-      expect(Validators.email().validate('test.@example.com'), false);
-      expect(Validators.email().validate('test@example..com'), false);
-      expect(Validators.email().validate('test@.example.com'), false);
-      expect(Validators.email().validate('.test@example.com'), false);
-      expect(Validators.email().validate('test@example.c'), false);
-      expect(Validators.email().validate('test@example.'), false);
+      final validator = Validators.email();
+      expect(validator.validate('invalid_email'), false);
+      expect(validator.validate('test@example'), false);
+      expect(validator.validate('test.@example.com'), false);
+      expect(validator.validate('test@example..com'), false);
+      expect(validator.validate('test@.example.com'), false);
+      expect(validator.validate('.test@example.com'), false);
+      expect(validator.validate('test@example.c'), false);
+      expect(validator.validate('test@example.'), false);
     });
   });
 
   group('Validators.base64()', () {
     test('base64() returns true for valid input', () {
-      expect(Validators.base64().validate('dGVzdA=='), true);
-      expect(Validators.base64().validate('dGVzdA+/'), true);
-      expect(Validators.base64().validate('/9j/4AAQSkZJRgABAgEBLAEsAAD/'), true);
-      expect(Validators.base64().validate('c29tZSBkYXRhIHdpdGggACBhbmQg77u/'), true);
+      final validator = Validators.base64();
+      expect(validator.validate('dGVzdA=='), true);
+      expect(validator.validate('dGVzdA+/'), true);
+      expect(validator.validate('/9j/4AAQSkZJRgABAgEBLAEsAAD/'), true);
+      expect(validator.validate('c29tZSBkYXRhIHdpdGggACBhbmQg77u/'), true);
     });
 
     test('base64() returns false for invalid input', () {
-      expect(Validators.base64().validate('dGVzdA='), false);
-      expect(Validators.base64().validate('dGVzdA+=='), false);
-      expect(Validators.base64().validate('dGVzdA+/=='), false);
-      expect(Validators.base64().validate('dGVzdA+'), false);
-      expect(Validators.base64().validate('dGVzdA'), false);
-      expect(Validators.base64().validate('test data'), false);
-      expect(Validators.base64().validate(r'!@#$'), false);
+      final validator = Validators.base64();
+      expect(validator.validate('dGVzdA='), false);
+      expect(validator.validate('dGVzdA+=='), false);
+      expect(validator.validate('dGVzdA+/=='), false);
+      expect(validator.validate('dGVzdA+'), false);
+      expect(validator.validate('dGVzdA'), false);
+      expect(validator.validate('test data'), false);
+      expect(validator.validate(r'!@#$'), false);
     });
   });
 
+  group('Validators.base64Url()', () {
+    test('returns true for valid input', () {
+      final validator = Validators.base64Url();
+      expect(validator.validate('aGVsbG8='), true);
+      expect(validator.validate('aGVsbG8gd29ybGQ='), true);
+    });
+
+    test('returns false for invalid input', () {
+      final validator = Validators.base64Url();
+      expect(validator.validate('aGVsbG8!*'), false);
+      expect(validator.validate('aGVsbG8gd29ybGQ?'), false);
+      expect(validator.validate('aGVsbG8gd29ybGQ!'), false);
+    });
+  });
+
+  group('Validators.btcAddress()', () {
+    test('returns true for valid input', () {
+      final validator = Validators.btcAddress();
+      expect(validator.validate('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2'), true);
+      expect(validator.validate('3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy'), true);
+      expect(validator.validate('1AGNa15ZQXAZUgFiqJ2i7Z2DPU2J6hW62i'), true);
+    });
+
+    test('returns false for invalid input', () {
+      final validator = Validators.btcAddress();
+      expect(validator.validate('Hello World'), false);
+      expect(validator.validate('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN!'), false);
+      expect(validator.validate('3J98t1WpEZ73CNmQviecrnyiWrnqRhWNL@'), false);
+      expect(validator.validate('1AGNa15ZQXAZUgFiqJ2i7Z2DPU2J6hW62#'), false);
+    });
+  });
+
+  group('Validators.btcAddressBech32()', () {
+    test('returns true for valid input', () {
+      final validator = Validators.btcAddressBech32();
+      expect(
+        validator.validate('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4'),
+        true,
+      );
+      expect(validator.validate('bc1zw508d6qejxtdg4y5r3zarvaryvaxxpcs'), true);
+    });
+
+    test('returns false for invalid input', () {
+      final validator = Validators.btcAddressBech32();
+      expect(validator.validate('Hello World'), false);
+      expect(validator.validate('1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2'), false);
+      expect(validator.validate('3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy'), false);
+    });
+  });
+
+  group('Validators.ethAddress()', () {
+    test('returns true for valid input', () {
+      final validator = Validators.ethAddress();
+      expect(
+        validator.validate('0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed'),
+        true,
+      );
+      expect(
+        validator.validate('0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359'),
+        true,
+      );
+    });
+
+    test('returns false for invalid input', () {
+      final validator = Validators.ethAddress();
+      expect(validator.validate('Hello World'), false);
+      expect(
+        validator.validate('0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAedx'),
+        false,
+      );
+      expect(
+        validator.validate('5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed'),
+        false,
+      );
+    });
+  });
+
+  group('Validators.uuid()', () {
+    test('returns true for valid input', () {
+      final validator = Validators.uuid();
+      expect(validator.validate('67fcbcdf-78a3-4c63-8a3e-7abf7c6a12f9'), true);
+      expect(validator.validate('f8e2bfc6-6d2e-4a3e-9f85-75d2f0bb2c04'), true);
+    });
+
+    test('returns false for invalid input', () {
+      final validator = Validators.uuid();
+      expect(validator.validate('67fcbcdf-78a3-4c63-8a3e-7abf7c6a12fg'), false);
+      expect(validator.validate('67FCBCDF-78A3-4C63-8A3E-7ABF7C6A12F9'), false);
+      expect(validator.validate('67fcbcdf-78a3-4c63-8a3e-7abf7c6a12f'), false);
+    });
+  });
 }
