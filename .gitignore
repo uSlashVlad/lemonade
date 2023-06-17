@@ -1,3 +1,5 @@
 packages/*/coverage
 
 .idea
+
+.dart_tool
